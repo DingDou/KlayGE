@@ -1,5 +1,5 @@
 /**
- * @file NullAudioEngine.cpp
+ * @file NullShowEngine.cpp
  * @author Minmin Gong
  *
  * @section DESCRIPTION
@@ -30,64 +30,59 @@
 
 #include <KlayGE/KlayGE.hpp>
 
-#include <KlayGE/NullAudio/NullAudio.hpp>
+#include <KlayGE/NullShow/NullShow.hpp>
 
 namespace KlayGE
 {
-	NullAudioEngine::NullAudioEngine()
-	{
-		this->SetListenerPos(float3(0, 0, 0));
-		this->SetListenerVel(float3(0, 0, 0));
-		this->SetListenerOri(float3(0, 0, 1), float3(0, 1, 0));
-	}
-
-	NullAudioEngine::~NullAudioEngine()
+	NullShowEngine::NullShowEngine()
 	{
 	}
 
-	void NullAudioEngine::DoSuspend()
+	NullShowEngine::~NullShowEngine()
 	{
 	}
 
-	void NullAudioEngine::DoResume()
+	void NullShowEngine::DoSuspend()
 	{
 	}
 
-	std::wstring const & NullAudioEngine::Name() const
+	void NullShowEngine::DoResume()
 	{
-		static std::wstring const name(L"Null Audio Engine");
-		return name;
 	}
 
-	float3 NullAudioEngine::GetListenerPos() const
+	void NullShowEngine::DoPlay()
 	{
-		return pos_;
 	}
 
-	void NullAudioEngine::SetListenerPos(float3 const & v)
+	void NullShowEngine::DoPause()
 	{
-		pos_ = v;
 	}
 
-	float3 NullAudioEngine::GetListenerVel() const
+	void NullShowEngine::DoStop()
 	{
-		return vel_;
 	}
 
-	void NullAudioEngine::SetListenerVel(float3 const & v)
+	void NullShowEngine::Load(std::string const & file_name)
 	{
-		vel_ = v;
+		KFL_UNUSED(file_name);
+
+		state_ = SS_Stopped;
 	}
 
-	void NullAudioEngine::GetListenerOri(float3& face, float3& up) const
+	bool NullShowEngine::IsComplete()
 	{
-		face = face_;
-		up = up_;
+		return true;
 	}
 
-	void NullAudioEngine::SetListenerOri(float3 const & face, float3 const & up)
+	ShowState NullShowEngine::State(long ms_timeout)
 	{
-		face_ = face;
-		up_ = up;
+		KFL_UNUSED(ms_timeout);
+
+		return state_;
+	}
+
+	TexturePtr NullShowEngine::PresentTexture()
+	{
+		return TexturePtr();
 	}
 }

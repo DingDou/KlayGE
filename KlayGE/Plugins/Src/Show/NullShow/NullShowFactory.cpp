@@ -1,5 +1,5 @@
 /**
- * @file NullAudioEngine.cpp
+ * @file NullShowFactory.cpp
  * @author Minmin Gong
  *
  * @section DESCRIPTION
@@ -29,65 +29,39 @@
  */
 
 #include <KlayGE/KlayGE.hpp>
+#include <KFL/Util.hpp>
+#include <KlayGE/ShowFactory.hpp>
 
-#include <KlayGE/NullAudio/NullAudio.hpp>
+#include <KlayGE/NullShow/NullShow.hpp>
+#include <KlayGE/NullShow/NullShowFactory.hpp>
 
 namespace KlayGE
 {
-	NullAudioEngine::NullAudioEngine()
+	class NullShowFactory : public ShowFactory
 	{
-		this->SetListenerPos(float3(0, 0, 0));
-		this->SetListenerVel(float3(0, 0, 0));
-		this->SetListenerOri(float3(0, 0, 1), float3(0, 1, 0));
-	}
+	public:
+		std::wstring const & Name() const
+		{
+			static std::wstring const name(L"Null Show Factory");
+			return name;
+		}
 
-	NullAudioEngine::~NullAudioEngine()
-	{
-	}
+	private:
+		std::unique_ptr<ShowEngine> MakeShowEngine() override
+		{
+			return MakeUniquePtr<NullShowEngine>();
+		}
 
-	void NullAudioEngine::DoSuspend()
-	{
-	}
+		void DoSuspend() override
+		{
+		}
+		void DoResume() override
+		{
+		}
+	};
+}
 
-	void NullAudioEngine::DoResume()
-	{
-	}
-
-	std::wstring const & NullAudioEngine::Name() const
-	{
-		static std::wstring const name(L"Null Audio Engine");
-		return name;
-	}
-
-	float3 NullAudioEngine::GetListenerPos() const
-	{
-		return pos_;
-	}
-
-	void NullAudioEngine::SetListenerPos(float3 const & v)
-	{
-		pos_ = v;
-	}
-
-	float3 NullAudioEngine::GetListenerVel() const
-	{
-		return vel_;
-	}
-
-	void NullAudioEngine::SetListenerVel(float3 const & v)
-	{
-		vel_ = v;
-	}
-
-	void NullAudioEngine::GetListenerOri(float3& face, float3& up) const
-	{
-		face = face_;
-		up = up_;
-	}
-
-	void NullAudioEngine::SetListenerOri(float3 const & face, float3 const & up)
-	{
-		face_ = face;
-		up_ = up;
-	}
+void MakeShowFactory(std::unique_ptr<KlayGE::ShowFactory>& ptr)
+{
+	ptr = KlayGE::MakeUniquePtr<KlayGE::NullShowFactory>();
 }

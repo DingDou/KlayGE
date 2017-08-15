@@ -1,5 +1,5 @@
 /**
- * @file NullAudioEngine.cpp
+ * @file NullShowFactory.hpp
  * @author Minmin Gong
  *
  * @section DESCRIPTION
@@ -28,66 +28,22 @@
  * from http://www.klayge.org/licensing/.
  */
 
-#include <KlayGE/KlayGE.hpp>
+#ifndef KLAYGE_PLUGINS_NULL_SHOW_FACTORY_HPP
+#define KLAYGE_PLUGINS_NULL_SHOW_FACTORY_HPP
 
-#include <KlayGE/NullAudio/NullAudio.hpp>
+#pragma once
 
-namespace KlayGE
+#include <KlayGE/PreDeclare.hpp>
+
+#ifdef KLAYGE_NULL_SE_SOURCE				// Build dll
+	#define KLAYGE_NULL_SE_API KLAYGE_SYMBOL_EXPORT
+#else										// Use dll
+	#define KLAYGE_NULL_SE_API KLAYGE_SYMBOL_IMPORT
+#endif
+
+extern "C"
 {
-	NullAudioEngine::NullAudioEngine()
-	{
-		this->SetListenerPos(float3(0, 0, 0));
-		this->SetListenerVel(float3(0, 0, 0));
-		this->SetListenerOri(float3(0, 0, 1), float3(0, 1, 0));
-	}
-
-	NullAudioEngine::~NullAudioEngine()
-	{
-	}
-
-	void NullAudioEngine::DoSuspend()
-	{
-	}
-
-	void NullAudioEngine::DoResume()
-	{
-	}
-
-	std::wstring const & NullAudioEngine::Name() const
-	{
-		static std::wstring const name(L"Null Audio Engine");
-		return name;
-	}
-
-	float3 NullAudioEngine::GetListenerPos() const
-	{
-		return pos_;
-	}
-
-	void NullAudioEngine::SetListenerPos(float3 const & v)
-	{
-		pos_ = v;
-	}
-
-	float3 NullAudioEngine::GetListenerVel() const
-	{
-		return vel_;
-	}
-
-	void NullAudioEngine::SetListenerVel(float3 const & v)
-	{
-		vel_ = v;
-	}
-
-	void NullAudioEngine::GetListenerOri(float3& face, float3& up) const
-	{
-		face = face_;
-		up = up_;
-	}
-
-	void NullAudioEngine::SetListenerOri(float3 const & face, float3 const & up)
-	{
-		face_ = face;
-		up_ = up;
-	}
+	KLAYGE_NULL_SE_API void MakeShowFactory(std::unique_ptr<KlayGE::ShowFactory>& ptr);
 }
+
+#endif			// KLAYGE_PLUGINS_NULL_SHOW_FACTORY_HPP

@@ -1,5 +1,5 @@
 /**
- * @file NullAudioEngine.cpp
+ * @file NullShow.hpp
  * @author Minmin Gong
  *
  * @section DESCRIPTION
@@ -28,66 +28,38 @@
  * from http://www.klayge.org/licensing/.
  */
 
-#include <KlayGE/KlayGE.hpp>
+#ifndef KLAYGE_PLUGINS_NULL_SHOW_HPP
+#define KLAYGE_PLUGINS_NULL_SHOW_HPP
 
-#include <KlayGE/NullAudio/NullAudio.hpp>
+#pragma once
+
+#include <string>
+
+#include <KlayGE/Show.hpp>
 
 namespace KlayGE
 {
-	NullAudioEngine::NullAudioEngine()
+	class NullShowEngine : public ShowEngine
 	{
-		this->SetListenerPos(float3(0, 0, 0));
-		this->SetListenerVel(float3(0, 0, 0));
-		this->SetListenerOri(float3(0, 0, 1), float3(0, 1, 0));
-	}
+	public:
+		NullShowEngine();
+		~NullShowEngine() override;
 
-	NullAudioEngine::~NullAudioEngine()
-	{
-	}
+		bool IsComplete() override;
 
-	void NullAudioEngine::DoSuspend()
-	{
-	}
+		void Load(std::string const & file_name) override;
+		TexturePtr PresentTexture() override;
 
-	void NullAudioEngine::DoResume()
-	{
-	}
+		ShowState State(long ms_timeout = -1) override;
 
-	std::wstring const & NullAudioEngine::Name() const
-	{
-		static std::wstring const name(L"Null Audio Engine");
-		return name;
-	}
+	private:
+		void DoSuspend() override;
+		void DoResume() override;
 
-	float3 NullAudioEngine::GetListenerPos() const
-	{
-		return pos_;
-	}
-
-	void NullAudioEngine::SetListenerPos(float3 const & v)
-	{
-		pos_ = v;
-	}
-
-	float3 NullAudioEngine::GetListenerVel() const
-	{
-		return vel_;
-	}
-
-	void NullAudioEngine::SetListenerVel(float3 const & v)
-	{
-		vel_ = v;
-	}
-
-	void NullAudioEngine::GetListenerOri(float3& face, float3& up) const
-	{
-		face = face_;
-		up = up_;
-	}
-
-	void NullAudioEngine::SetListenerOri(float3 const & face, float3 const & up)
-	{
-		face_ = face;
-		up_ = up;
-	}
+		void DoPlay() override;
+		void DoStop() override;
+		void DoPause() override;
+	};
 }
+
+#endif		// KLAYGE_PLUGINS_NULL_SHOW_HPP
